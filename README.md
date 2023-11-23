@@ -2,7 +2,7 @@
 Quickly made to test out a RL model idea in progress
 
 ## View
-![game view](./game_view.png)
+![game view](./assets/game_view.png)
 
 ## Start
 No external dependencies needed
@@ -13,4 +13,4 @@ start with<br>
 ## Movement
 `a s d w` movement, left, right, down and up respectively
 
-![game play](./game_gif.gif)
+![game play](./assets/game_gif.gif)
