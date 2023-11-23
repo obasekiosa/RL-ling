@@ -8,14 +8,17 @@ screen."""
         try:
             self.impl = _GetchWindows()
         except ImportError:
-            self.impl = _GetchUnix()
+            try:
+                self.impl = _GetchUnix()
+            except:
+                self.impl = _GetchMacCarbon()
 
     def __call__(self, wait_time_secs): return self.impl(wait_time_secs)
 
 
 class _GetchUnix:
     def __init__(self):
-        import tty, sys
+        import tty, sys, termios
 
     def __call__(self, wait_time_secs):
         import sys, tty, termios
@@ -48,6 +51,34 @@ class _GetchWindows:
     def __call__(self, wait_time_secs):
         import msvcrt
         return msvcrt.getch()
+
+
+class _GetchMacCarbon:
+    """
+    A function which returns the current ASCII key that is down;
+    if no ASCII key is down, the null string is returned.  The
+    page http://www.mactech.com/macintosh-c/chap02-1.html was
+    very helpful in figuring out how to do this.
+    """
+    def __init__(self):
+        import Carbon
+
+    def __call__(self, wait_time_secs):
+        import Carbon
+        if Carbon.Evt.EventAvail(0x0008)[0]==0: # 0x0008 is the keyDownMask
+            return ''
+        else:
+            #
+            # The event contains the following info:
+            # (what,msg,when,where,mod)=Carbon.Evt.GetNextEvent(0x0008)[1]
+            #
+            # The message (msg) contains the ASCII char which is
+            # extracted with the 0x000000FF charCodeMask; this
+            # number is converted to an ASCII character with chr() and
+            # returned
+            #
+            (what,msg,when,where,mod)=Carbon.Evt.GetNextEvent(0x0008)[1]
+            return chr(msg & 0x000000FF)
 
 
 
