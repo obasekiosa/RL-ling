@@ -11,6 +11,6 @@ start with<br>
 `python game.py`
 
 ## Movement
-`a s d w` movement, left, right, down and up respectively
+`a s d w` movement, left, down, right and up respectively
 
 ![game play](./assets/game_gif.gif)
